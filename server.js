@@ -1,10 +1,43 @@
 var express = require("express");
 var app = express();
+var moment = require("moment");
 
-app.get('/', function(req, res) {
-    res.end('Hello World!');
+// Set the view directory to /views
+app.set("views", __dirname + "/views");
+
+// Let's use the Pug templating language
+app.set("view engine", "pug");
+
+app.get("/", function(request, response) {
+  response.render('index');
 });
-app.listen(8080, function () {
+
+app.get('/:date', function(req, res) {
+    var date = req.params.date;
+    var day = new Date(date);
+    if (day.toDateString() === 'Invalid Date' || day.toDateString() === 'NaN') {
+        if (!moment.unix(date).isValid()) {
+            console.log('invalid date');
+            res.send({
+                unix: null,
+                natural: null
+            });
+        }
+        else {
+            res.send({
+                unix: moment.unix(date, 'X').format('x'),
+                natural: moment.unix(date, 'X').format('LL')
+            });
+        }
+    }
+    else {
+        res.send({
+            unix: day.getTime(),
+            natural: day.toDateString() 
+        });
+    }
+});
+app.listen(8080, function() {
     // body...
     console.log("new server listening on port 8080");
 });
