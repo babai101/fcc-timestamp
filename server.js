@@ -37,7 +37,4 @@ app.get('/:date', function(req, res) {
         });
     }
 });
-app.listen(8080, function() {
-    // body...
-    console.log("new server listening on port 8080");
-});
+app.listen(process.evn.port || 8080);
