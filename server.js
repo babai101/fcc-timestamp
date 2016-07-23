@@ -37,4 +37,4 @@ app.get('/:date', function(req, res) {
         });
     }
 });
-app.listen(process.evn.port || 8080);
+app.listen(process.env.port || 8080);
